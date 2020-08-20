@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"log"
 	"strconv"
+	"time"
 )
 
 // Block defines the structure of a block.
@@ -59,4 +60,19 @@ func bytesToInt(data []byte) int64 {
 	binary.Read(buf, binary.BigEndian, &i)
 
 	return i
+}
+
+func newBlock(data, prevBlockHash string, height int64) *Block {
+	block := &Block{
+		Timestamp:     time.Now().Unix(),
+		Height:        height,
+		Data:          data,
+		PrevBlockHash: prevBlockHash,
+		Nonce:         0,
+		Hash:          "",
+	}
+
+	block.setHash()
+
+	return block
 }

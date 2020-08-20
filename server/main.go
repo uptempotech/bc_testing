@@ -1,12 +1,12 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
 
 	"github.com/uptempotech/bc_testing/proto"
 	"github.com/uptempotech/bc_testing/server/blockchain"
+	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
 
@@ -15,6 +15,7 @@ type blockServer struct {
 }
 
 func (server *blockServer) AddBlock(_ context.Context, in *proto.AddBlockRequest) (*proto.AddBlockResponse, error) {
+	log.Println("Add new Block called")
 	block := server.Blockchain.AddBlock(in.GetData())
 	return &proto.AddBlockResponse{
 		Hash: block.Hash,
