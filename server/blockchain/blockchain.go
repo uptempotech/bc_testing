@@ -1,5 +1,7 @@
 package blockchain
 
+import "fmt"
+
 // Blockchain defines the structure of the blockchain itself.
 type Blockchain struct {
 	Blocks []*Block
@@ -18,6 +20,7 @@ func (bc *Blockchain) AddBlock(data string) *Block {
 
 // NewBlockChain creates new blockchain.
 func NewBlockChain() *Blockchain {
+	fmt.Println("Initializing new blockchain with Genesis block:")
 	return &Blockchain{[]*Block{newGenesisBlock()}}
 }
 

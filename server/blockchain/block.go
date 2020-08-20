@@ -2,7 +2,6 @@ package blockchain
 
 import (
 	"bytes"
-	"crypto/sha256"
 	"encoding/binary"
 	"encoding/gob"
 	"encoding/hex"
@@ -19,21 +18,6 @@ type Block struct {
 	Data          string
 	Nonce         int64
 	Hash          string
-}
-
-func (b *Block) setHash() {
-	data := bytes.Join(
-		[][]byte{
-			[]byte(b.Data),
-			[]byte(b.PrevBlockHash),
-			intToBytes(b.Timestamp),
-			intToBytes(b.Height),
-			intToBytes(b.Nonce),
-		},
-		[]byte{},
-	)
-	hash := sha256.Sum256([]byte(data))
-	b.Hash = hex.EncodeToString(hash[:])
 }
 
 func (b *Block) serialize() []byte {
@@ -72,7 +56,11 @@ func newBlock(data, prevBlockHash string, height int64) *Block {
 		Hash:          "",
 	}
 
-	block.setHash()
+	pow := newProof(block)
+	nonce, hash := pow.Run()
+
+	block.Hash = hex.EncodeToString(hash[:])
+	block.Nonce = nonce
 
 	return block
 }
