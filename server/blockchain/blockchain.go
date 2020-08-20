@@ -1,23 +1,26 @@
 package blockchain
 
-import (
-	"crypto/sha256"
-	"encoding/hex"
-)
-
-// Block defines the structure of a block.
-type Block struct {
-	Hash          string
-	PrevBlockHash string
-	Data          string
-}
-
 // Blockchain defines the structure of the blockchain itself.
 type Blockchain struct {
 	Blocks []*Block
 }
 
-func (b *Block) setHash() {
-	hash := sha256.Sum256([]byte(b.PrevBlockHash + b.Data))
-	b.Hash = hex.EncodeToString(hash[:])
+// AddBlock will a block to the blockchain.
+func (bc *Blockchain) AddBlock(data string) *Block {
+	prevBlock := bc.Blocks[len(bc.Blocks)-1]
+
+	block := newBlock(data, prevBlock.Hash, prevBlock.Height+1)
+
+	bc.Blocks = append(bc.Blocks, block)
+
+	return block
+}
+
+// NewBlockChain creates new blockchain.
+func NewBlockChain() *Blockchain {
+	return &Blockchain{[]*Block{newGenesisBlock()}}
+}
+
+func newGenesisBlock() *Block {
+	return newBlock("Genesis Block", "", 0)
 }

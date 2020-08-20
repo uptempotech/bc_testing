@@ -19,9 +19,12 @@ message GetBlockchainResponse {
 }
 
 message Block {
-    string hash = 1;
-    string prevBlockHash = 2;
+    int64 timestamp = 1;
+    int64 height = 2;
     string data = 3;
+    string prevBlockHash = 4;
+    int64 nonce = 5;
+    string hash = 6;
 }
 
 service Blockchain {
